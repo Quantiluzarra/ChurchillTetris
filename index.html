@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
+    <!-- Space Background -->
+    <div id="background"></div>
+
+    <!-- Main Menu -->
+    <div id="menu" class="screen">
+        <h1>Tetris</h1>
+        <button id="play-btn">Play</button>
+        <button id="settings-btn">Settings</button>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settings" class="screen" style="display: none;">
+        <h2>Settings</h2>
+        <div class="setting">
+            <label>Theme:</label>
+            <select id="theme-select">
+                <option value="light">Light</option>
+                <option value="dark" selected>Dark</option>
+            </select>
+        </div>
+        <div class="setting">
+            <label>Difficulty:</label>
+            <select id="difficulty-select">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+                <option value="ai">AI</option>
+            </select>
+        </div>
+        <button id="back-btn">Back</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game" class="screen" style="display: none;">
+        <div class="game-container">
+            <div id="game-board"></div>
+            <div class="side-panel">
+                <div id="next-block"></div>
+                <div id="score">Score: 0</div>
+            </div>
+        </div>
+        <div id="controls">
+            <button id="left-btn">Left</button>
+            <button id="right-btn">Right</button>
+            <button id="rotate-btn">Rotate</button>
+            <button id="down-btn">Down</button>
+            <button id="pause-btn">Pause</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
