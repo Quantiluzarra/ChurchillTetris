@@ -3,60 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Hentai Search by Tags</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        #tag-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .hentai-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .hentai-item:hover {
+            transform: scale(1.05);
+        }
+        .hentai-item h3 {
+            margin: 10px 0;
+            color: #007bff;
+        }
+        .hentai-item p {
+            font-size: 14px;
+            color: #666;
+        }
+        .hentai-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
 </head>
-<body class="dark">
-    <!-- Space Background -->
-    <div id="background"></div>
-
-    <!-- Main Menu -->
-    <div id="menu" class="screen">
-        <h1>Tetris</h1>
-        <button id="play-btn">Play</button>
-        <button id="settings-btn">Settings</button>
+<body>
+    <h1>Hentai Search by Tags</h1>
+    <div id="search-container">
+        <input type="text" id="tag-input" placeholder="Enter tags separated by commas (e.g., romance, fantasy)">
     </div>
+    <div id="results"></div>
 
-    <!-- Settings Screen -->
-    <div id="settings" class="screen" style="display: none;">
-        <h2>Settings</h2>
-        <div class="setting">
-            <label>Theme:</label>
-            <select id="theme-select">
-                <option value="light">Light</option>
-                <option value="dark" selected>Dark</option>
-            </select>
-        </div>
-        <div class="setting">
-            <label>Difficulty:</label>
-            <select id="difficulty-select">
-                <option value="easy">Easy</option>
-                <option value="medium" selected>Medium</option>
-                <option value="hard">Hard</option>
-                <option value="ai">AI</option>
-            </select>
-        </div>
-        <button id="back-btn">Back</button>
-    </div>
+    <script>
+        // Hardcoded hentai data (example entries; expand as needed)
+        // Each item has: title, tags (array), viewUrl (external site for viewing)
+        const hentaiData = [
+            {
+                title: "Example Hentai 1",
+                tags: ["romance", "fantasy", "elf"],
+                viewUrl: "https://nhentai.net/g/123456/"  // Replace with actual external viewing site URL
+            },
+            {
+                title: "Example Hentai 2",
+                tags: ["action", "adventure", "monster"],
+                viewUrl: "https://nhentai.net/g/789012/"
+            },
+            {
+                title: "Example Hentai 3",
+                tags: ["school", "romance", "drama"],
+                viewUrl: "https://nhentai.net/g/345678/"
+            },
+            {
+                title: "Example Hentai 4",
+                tags: ["fantasy", "magic", "harem"],
+                viewUrl: "https://nhentai.net/g/901234/"
+            },
+            {
+                title: "Example Hentai 5",
+                tags: ["sci-fi", "robot", "action"],
+                viewUrl: "https://nhentai.net/g/567890/"
+            },
+            // Add more entries here for a fuller database
+            // For real use, populate with hundreds/thousands of entries
+        ];
 
-    <!-- Game Screen -->
-    <div id="game" class="screen" style="display: none;">
-        <div class="game-container">
-            <div id="game-board"></div>
-            <div class="side-panel">
-                <div id="next-block"></div>
-                <div id="score">Score: 0</div>
-            </div>
-        </div>
-        <div id="controls">
-            <button id="left-btn">Left</button>
-            <button id="right-btn">Right</button>
-            <button id="rotate-btn">Rotate</button>
-            <button id="down-btn">Down</button>
-            <button id="pause-btn">Pause</button>
-        </div>
-    </div>
+        // Function to render results
+        function renderResults(items) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';  // Clear previous results
 
-    <script src="script.js"></script>
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('hentai-item');
+
+                // Create anchor tag for redirection
+                const link = document.createElement('a');
+                link.href = item.viewUrl;
+                link.target = "_blank";  // Open in new tab
+
+                const title = document.createElement('h3');
+                title.textContent = item.title;
+
+                const tagsPara = document.createElement('p');
+                tagsPara.textContent = `Tags: ${item.tags.join(', ')}`;
+
+                link.appendChild(title);
+                link.appendChild(tagsPara);
+                div.appendChild(link);
+                resultsContainer.appendChild(div);
+            });
+        }
+
+        // Initial render of all items
+        renderResults(hentaiData);
+
+        // Search functionality
+        const tagInput = document.getElementById('tag-input');
+        tagInput.addEventListener('input', () => {
+            const searchTags = tagInput.value.toLowerCase().split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+
+            if (searchTags.length === 0) {
+                renderResults(hentaiData);  // Show all if no tags
+                return;
+            }
+
+            const filtered = hentaiData.filter(item => {
+                const itemTagsLower = item.tags.map(t => t.toLowerCase());
+                // Match if all search tags are present in item's tags
+                return searchTags.every(st => itemTagsLower.includes(st));
+            });
+
+            renderResults(filtered);
+        });
+    </script>
 </body>
 </html>
